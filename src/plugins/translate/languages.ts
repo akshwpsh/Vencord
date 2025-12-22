@@ -208,6 +208,8 @@ export const DeeplLanguages = {
     "uk": "Ukrainian"
 } as const;
 
+export const GeminiLanguages = GoogleLanguages;
+
 export function deeplLanguageToGoogleLanguage(language: string) {
     switch (language) {
         case "": return "auto";

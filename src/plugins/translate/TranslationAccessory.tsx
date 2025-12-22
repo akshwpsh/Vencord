@@ -19,13 +19,21 @@
 import { Message } from "@vencord/discord-types";
 import { Parser, useEffect, useState } from "@webpack/common";
 
+import { settings } from "./settings";
 import { TranslateIcon } from "./TranslateIcon";
-import { cl, TranslationValue } from "./utils";
+import { cl, translate, TranslationValue } from "./utils";
 
 const TranslationSetters = new Map<string, (v: TranslationValue) => void>();
+const AutoTranslatedMessages = new Set<string>();
 
 export function handleTranslate(messageId: string, data: TranslationValue) {
-    TranslationSetters.get(messageId)!(data);
+    TranslationSetters.get(messageId)?.(data);
+}
+
+function getMessageContent(message: Message) {
+    return message.content
+        || message.messageSnapshots?.[0]?.message.content
+        || message.embeds?.find(embed => embed.type === "auto_moderation_message")?.rawDescription || "";
 }
 
 function Dismiss({ onDismiss }: { onDismiss: () => void; }) {
@@ -48,8 +56,32 @@ export function TranslationAccessory({ message }: { message: Message; }) {
 
         TranslationSetters.set(message.id, setTranslation);
 
-        return () => void TranslationSetters.delete(message.id);
-    }, []);
+        // Auto-translate if enabled and not already translated
+        if (settings.store.autoTranslateReceived && !AutoTranslatedMessages.has(message.id)) {
+            const content = getMessageContent(message);
+            if (content) {
+                AutoTranslatedMessages.add(message.id);
+                translate("received", content)
+                    .then(trans => {
+                        // Only show if the translation is different from original
+                        if (trans.text !== content) {
+                            setTranslation(trans);
+                        }
+                    })
+                    .catch(() => {
+                        // Silently fail for auto-translate
+                        AutoTranslatedMessages.delete(message.id);
+                    });
+            }
+        }
+
+        return () => {
+            TranslationSetters.delete(message.id);
+            if (!translation) {
+                AutoTranslatedMessages.delete(message.id);
+            }
+        };
+    }, [message.id]);
 
     if (!translation) return null;
 

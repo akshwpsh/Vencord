@@ -10,16 +10,16 @@ import { Alerts, Parser } from "@webpack/common";
 
 function getErrorMessage(e: any) {
     if (!e?.code || !e.cmd)
-        return "An unknown error occurred.\nPlease try again or see the console for more info.";
+        return "알 수 없는 오류가 발생했습니다.\n다시 시도하거나 콘솔에서 상세 정보를 확인하세요.";
 
     const { code, path, cmd, stderr } = e;
 
     if (code === "ENOENT")
-        return `Command \`${path}\` not found.\nPlease install it and try again.`;
+        return `명령 \`${path}\`를 찾을 수 없습니다.\n설치 후 다시 시도해주세요.`;
 
-    const extra = stderr || `Code \`${code}\`. See the console for more info.`;
+    const extra = stderr || `코드 \`${code}\`. 콘솔에서 자세히 확인하세요.`;
 
-    return `An error occurred while running \`${cmd}\`:\n${extra}`;
+    return `\`${cmd}\` 실행 중 오류가 발생했습니다:\n${extra}`;
 }
 
 export function runWithDispatch(dispatch: React.Dispatch<React.SetStateAction<boolean>>, action: () => any) {
@@ -34,7 +34,7 @@ export function runWithDispatch(dispatch: React.Dispatch<React.SetStateAction<bo
             const err = getErrorMessage(e);
 
             Alerts.show({
-                title: "Oops!",
+                title: "앗!",
                 body: (
                     <ErrorCard>
                         {err.split("\n").map((line, idx) =>

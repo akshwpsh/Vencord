@@ -39,10 +39,10 @@ export function CspErrorCard() {
         forceUpdate();
 
         Alerts.show({
-            title: "Restart Required",
-            body: "A restart is required to apply this change",
-            confirmText: "Restart now",
-            cancelText: "Later!",
+            title: "재시작 필요",
+            body: "변경 사항을 적용하려면 재시작이 필요합니다",
+            confirmText: "지금 재시작",
+            cancelText: "나중에",
             onConfirm: relaunch
         });
     };
@@ -51,14 +51,14 @@ export function CspErrorCard() {
 
     return (
         <ErrorCard className={Margins.bottom16}>
-            <Forms.FormTitle tag="h5">Blocked Resources</Forms.FormTitle>
-            <Forms.FormText>Some images, styles, or fonts were blocked because they come from disallowed domains.</Forms.FormText>
-            <Forms.FormText>It is highly recommended to move them to GitHub or Imgur. But you may also allow domains if you fully trust them.</Forms.FormText>
+            <Forms.FormTitle tag="h5">차단된 리소스</Forms.FormTitle>
+            <Forms.FormText>허용되지 않은 도메인에서 로드되어 일부 이미지, 스타일, 폰트가 차단되었습니다.</Forms.FormText>
+            <Forms.FormText>가능하면 GitHub나 Imgur로 옮기는 것을 권장합니다. 완전히 신뢰하는 도메인이라면 허용할 수도 있습니다.</Forms.FormText>
             <Forms.FormText>
-                After allowing a domain, you have to fully close (from tray / task manager) and restart {IS_DISCORD_DESKTOP ? "Discord" : "Vesktop"} to apply the change.
+                도메인을 허용한 뒤에는 {IS_DISCORD_DESKTOP ? "Discord" : "Vesktop"}를 완전히 종료(트레이/작업 관리자에서 종료) 후 다시 시작해야 적용됩니다.
             </Forms.FormText>
 
-            <Forms.FormTitle tag="h5" className={classes(Margins.top16, Margins.bottom8)}>Blocked URLs</Forms.FormTitle>
+            <Forms.FormTitle tag="h5" className={classes(Margins.top16, Margins.bottom8)}>차단된 URL</Forms.FormTitle>
             <div className="vc-settings-csp-list">
                 {errors.map((url, i) => (
                     <div key={url}>
@@ -66,7 +66,7 @@ export function CspErrorCard() {
                         <div className="vc-settings-csp-row">
                             <Link href={url}>{url}</Link>
                             <Button color={Button.Colors.PRIMARY} onClick={() => allowUrl(url)} disabled={isImgurHtmlDomain(url)}>
-                                Allow
+                                허용
                             </Button>
                         </div>
                     </div>
@@ -77,9 +77,9 @@ export function CspErrorCard() {
                 <>
                     <Divider className={classes(Margins.top8, Margins.bottom16)} />
                     <Forms.FormText>
-                        Imgur links should be direct links in the form of <code>https://i.imgur.com/...</code>
+                        Imgur 링크는 <code>https://i.imgur.com/...</code> 형태의 직접 링크여야 합니다.
                     </Forms.FormText>
-                    <Forms.FormText>To obtain a direct link, right-click the image and select "Copy image address".</Forms.FormText>
+                    <Forms.FormText>직접 링크를 얻으려면 이미지를 우클릭하고 "이미지 주소 복사"를 선택하세요.</Forms.FormText>
                 </>
             )}
         </ErrorCard>

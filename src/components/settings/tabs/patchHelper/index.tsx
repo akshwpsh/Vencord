@@ -39,9 +39,9 @@ const findCandidates = debounce(function ({ find, setModule, setError }) {
     const len = keys.length;
 
     if (len === 0)
-        setError("No match. Perhaps that module is lazy loaded?");
+        setError("일치하는 항목이 없습니다. 모듈이 지연 로드되었을 수 있습니다.");
     else if (len !== 1)
-        setError("Multiple matches. Please refine your filter");
+        setError("여러 항목이 일치합니다. 필터를 더 구체적으로 입력하세요");
     else
         setModule([keys[0], candidates[keys[0]]]);
 });
@@ -105,7 +105,7 @@ function PatchHelper() {
 
     return (
         <SettingsTab>
-            <HeadingTertiary>Full patch</HeadingTertiary>
+            <HeadingTertiary>전체 패치</HeadingTertiary>
             <FullPatchInput
                 setFind={onFindChange}
                 setParsedFind={setParsedFind}
@@ -113,7 +113,7 @@ function PatchHelper() {
                 setReplacement={setReplacement}
             />
 
-            <HeadingTertiary className={Margins.top8}>Find</HeadingTertiary>
+            <HeadingTertiary className={Margins.top8}>검색</HeadingTertiary>
             <TextInput
                 type="text"
                 value={find}
@@ -121,7 +121,7 @@ function PatchHelper() {
                 error={findError}
             />
 
-            <HeadingTertiary className={Margins.top8}>Match</HeadingTertiary>
+            <HeadingTertiary className={Margins.top8}>매칭</HeadingTertiary>
             <TextInput
                 type="text"
                 value={match}
@@ -148,14 +148,14 @@ function PatchHelper() {
 
             {!!(find && match && replacement) && (
                 <>
-                    <HeadingTertiary className={Margins.top20}>Code</HeadingTertiary>
+                    <HeadingTertiary className={Margins.top20}>코드</HeadingTertiary>
                     <CodeBlock lang="js" content={code} />
                     <Flex className={Margins.top16}>
                         <Button onClick={() => copyWithToast(code)}>
-                            Copy to Clipboard
+                            클립보드에 복사
                         </Button>
                         <Button onClick={() => copyWithToast("```ts\n" + code + "\n```")}>
-                            Copy as Codeblock
+                            코드 블록으로 복사
                         </Button>
                     </Flex>
                 </>
@@ -164,4 +164,4 @@ function PatchHelper() {
     );
 }
 
-export default IS_DEV ? wrapTab(PatchHelper, "PatchHelper") : null;
+export default IS_DEV ? wrapTab(PatchHelper, "패치 헬퍼") : null;

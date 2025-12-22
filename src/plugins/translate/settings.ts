@@ -22,55 +22,73 @@ import { OptionType } from "@utils/types";
 export const settings = definePluginSettings({
     receivedInput: {
         type: OptionType.STRING,
-        description: "Language that received messages should be translated from",
+        description: "번역할 메시지의 원래 언어",
         default: "auto",
         hidden: true
     },
     receivedOutput: {
         type: OptionType.STRING,
-        description: "Language that received messages should be translated to",
-        default: "en",
+        description: "받은 메시지를 번역할 언어",
+        default: "ko",
         hidden: true
     },
     sentInput: {
         type: OptionType.STRING,
-        description: "Language that your own messages should be translated from",
+        description: "보낼 메시지의 원래 언어",
         default: "auto",
         hidden: true
     },
     sentOutput: {
         type: OptionType.STRING,
-        description: "Language that your own messages should be translated to",
-        default: "en",
+        description: "보낼 메시지를 번역할 언어",
+        default: "ko",
         hidden: true
     },
 
     service: {
         type: OptionType.SELECT,
-        description: IS_WEB ? "Translation service (Not supported on Web!)" : "Translation service",
+        description: IS_WEB ? "번역 서비스 (웹에서는 지원되지 않음!)" : "번역 서비스",
         disabled: () => IS_WEB,
         options: [
             { label: "Google Translate", value: "google", default: true },
+            { label: "Google Gemini", value: "gemini" },
             { label: "DeepL Free", value: "deepl" },
             { label: "DeepL Pro", value: "deepl-pro" }
         ] as const,
         onChange: resetLanguageDefaults
     },
+    geminiApiKey: {
+        type: OptionType.STRING,
+        description: "Google Gemini API 키",
+        default: "",
+        placeholder: "https://aistudio.google.com/apikey 에서 API 키를 받으세요",
+        disabled: () => IS_WEB
+    },
     deeplApiKey: {
         type: OptionType.STRING,
-        description: "DeepL API key",
+        description: "DeepL API 키",
         default: "",
-        placeholder: "Get your API key from https://deepl.com/your-account",
+        placeholder: "https://deepl.com/your-account 에서 API 키를 받으세요",
         disabled: () => IS_WEB
     },
     autoTranslate: {
         type: OptionType.BOOLEAN,
-        description: "Automatically translate your messages before sending. You can also shift/right click the translate button to toggle this",
+        description: "메시지 전송 전에 자동으로 번역합니다. 번역 버튼을 Shift/우클릭으로도 토글할 수 있습니다",
         default: false
+    },
+    autoTranslateReceived: {
+        type: OptionType.BOOLEAN,
+        description: "받은 메시지를 자동으로 번역합니다",
+        default: false
+    },
+    translateMessageGroup: {
+        type: OptionType.BOOLEAN,
+        description: "같은 사용자의 연속된 메시지를 한 번에 번역합니다",
+        default: true
     },
     showAutoTranslateTooltip: {
         type: OptionType.BOOLEAN,
-        description: "Show a tooltip on the ChatBar button whenever a message is automatically translated",
+        description: "메시지가 자동으로 번역될 때 채팅창 버튼에 툴팁을 표시합니다",
         default: true
     },
 }).withPrivateSettings<{
@@ -80,13 +98,13 @@ export const settings = definePluginSettings({
 export function resetLanguageDefaults() {
     if (IS_WEB || settings.store.service === "google") {
         settings.store.receivedInput = "auto";
-        settings.store.receivedOutput = "en";
+        settings.store.receivedOutput = "ko";
         settings.store.sentInput = "auto";
-        settings.store.sentOutput = "en";
+        settings.store.sentOutput = "ko";
     } else {
         settings.store.receivedInput = "";
-        settings.store.receivedOutput = "en-us";
+        settings.store.receivedOutput = "ko";
         settings.store.sentInput = "";
-        settings.store.sentOutput = "en-us";
+        settings.store.sentOutput = "ko";
     }
 }
