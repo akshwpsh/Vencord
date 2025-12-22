@@ -21,7 +21,7 @@ import { onlyOnce } from "@utils/onlyOnce";
 import { PluginNative } from "@utils/types";
 import { showToast, Toasts } from "@webpack/common";
 
-import { DeeplLanguages, deeplLanguageToGoogleLanguage, GoogleLanguages } from "./languages";
+import { DeeplLanguages, deeplLanguageToGoogleLanguage, GeminiLanguages, GoogleLanguages } from "./languages";
 import { resetLanguageDefaults, settings } from "./settings";
 
 export const cl = classNameFactory("vc-trans-");
@@ -47,12 +47,16 @@ export interface TranslationValue {
 
 export const getLanguages = () => IS_WEB || settings.store.service === "google"
     ? GoogleLanguages
-    : DeeplLanguages;
+    : settings.store.service === "gemini"
+        ? GeminiLanguages
+        : DeeplLanguages;
 
 export async function translate(kind: "received" | "sent", text: string): Promise<TranslationValue> {
     const translate = IS_WEB || settings.store.service === "google"
         ? googleTranslate
-        : deeplTranslate;
+        : settings.store.service === "gemini"
+            ? geminiTranslate
+            : deeplTranslate;
 
     try {
         return await translate(
@@ -96,6 +100,69 @@ async function googleTranslate(text: string, sourceLang: string, targetLang: str
         sourceLanguage: GoogleLanguages[sourceLanguage] ?? sourceLanguage,
         text: translation
     };
+}
+
+async function geminiTranslate(text: string, sourceLang: string, targetLang: string): Promise<TranslationValue> {
+    if (!settings.store.geminiApiKey) {
+        showToast("Google Gemini API key is not set. Resetting to Google", Toasts.Type.FAILURE);
+
+        settings.store.service = "google";
+        resetLanguageDefaults();
+
+        return googleTranslate(text, sourceLang, targetLang);
+    }
+
+    const sourceLanguageName = GoogleLanguages[sourceLang as keyof typeof GoogleLanguages] ?? sourceLang;
+    const targetLanguageName = GoogleLanguages[targetLang as keyof typeof GoogleLanguages] ?? targetLang;
+
+    const prompt = sourceLang === "auto"
+        ? `Only provide the translated text without any explanation:\n\nTranslate to ${targetLanguageName}:\n\n${text}`
+        : `Only provide the translated text without any explanation:\n\nTranslate from ${sourceLanguageName} to ${targetLanguageName}:\n\n${text}`;
+
+    try {
+        const res = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${settings.store.geminiApiKey}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
+                })
+            }
+        );
+
+        if (!res.ok) {
+            if (res.status === 401 || res.status === 403)
+                throw "Invalid Google Gemini API key";
+            throw new Error(
+                `Failed to translate "${text}" (${sourceLang} -> ${targetLang})`
+                + `\n${res.status} ${res.statusText}`
+            );
+        }
+
+        const data = await res.json();
+
+        if (!data.candidates?.[0]?.content?.parts?.[0]?.text)
+            throw "Invalid response from Google Gemini API";
+
+        const translatedText = data.candidates[0].content.parts[0].text.trim();
+
+        return {
+            sourceLanguage: sourceLanguageName,
+            text: translatedText
+        };
+    } catch (e) {
+        if (typeof e === "string")
+            throw e;
+
+        throw `Failed to connect to Google Gemini API: ${e instanceof Error ? e.message : String(e)}`;
+    }
 }
 
 function fallbackToGoogle(text: string, sourceLang: string, targetLang: string): Promise<TranslationValue> {

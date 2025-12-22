@@ -51,20 +51,20 @@ function ReloadRequiredCard({ required }: { required: boolean; }) {
             {required
                 ? (
                     <>
-                        <HeadingTertiary>Restart required!</HeadingTertiary>
+                        <HeadingTertiary>재시작 필요!</HeadingTertiary>
                         <Paragraph className={cl("dep-text")}>
-                            Restart now to apply new plugins and their settings
+                            새 플러그인과 설정을 적용하려면 지금 재시작하세요
                         </Paragraph>
                         <Button onClick={() => location.reload()} className={cl("restart-button")}>
-                            Restart
+                            재시작
                         </Button>
                     </>
                 )
                 : (
                     <>
-                        <HeadingTertiary>Plugin Management</HeadingTertiary>
-                        <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
-                        <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
+                        <HeadingTertiary>플러그인 관리</HeadingTertiary>
+                        <Paragraph>플러그인 정보를 보려면 톱니바퀴나 정보 아이콘을 눌러주세요</Paragraph>
+                        <Paragraph>톱니바퀴가 있는 플러그인은 설정을 변경할 수 있습니다!</Paragraph>
                     </>
                 )}
         </Card>
@@ -87,27 +87,27 @@ function ExcludedPluginsList({ search }: { search: string; }) {
         : [];
 
     const ExcludedReasons: Record<"web" | "discordDesktop" | "vesktop" | "desktop" | "dev", string> = {
-        desktop: "Discord Desktop app or Vesktop",
-        discordDesktop: "Discord Desktop app",
-        vesktop: "Vesktop app",
-        web: "Vesktop app and the Web version of Discord",
-        dev: "Developer version of Vencord"
+        desktop: "Discord 데스크톱 앱 또는 Vesktop",
+        discordDesktop: "Discord 데스크톱 앱",
+        vesktop: "Vesktop 앱",
+        web: "Vesktop 앱과 Discord 웹 버전",
+        dev: "Vencord 개발 버전"
     };
 
     return (
         <Paragraph className={Margins.top16}>
             {matchingExcludedPlugins.length
                 ? <>
-                    <Paragraph>Are you looking for:</Paragraph>
+                    <Paragraph>혹시 찾고 계신 플러그인은:</Paragraph>
                     <ul>
                         {matchingExcludedPlugins.map(([name, reason]) => (
                             <li key={name}>
-                                <b>{name}</b>: Only available on the {ExcludedReasons[reason]}
+                                <b>{name}</b>: {ExcludedReasons[reason]}에서만 사용할 수 있습니다
                             </li>
                         ))}
                     </ul>
                 </>
-                : "No plugins meet the search criteria."
+                : "검색 조건에 맞는 플러그인이 없습니다."
             }
         </Paragraph>
     );
@@ -120,10 +120,10 @@ function PluginSettings() {
     useCleanupEffect(() => {
         if (changes.hasChanges)
             Alerts.show({
-                title: "Restart required",
+                title: "재시작 필요",
                 body: (
                     <>
-                        <p>The following plugins require a restart:</p>
+                        <p>다음 플러그인을 적용하려면 재시작이 필요합니다:</p>
                         <div>{changes.map((s, i) => (
                             <>
                                 {i > 0 && ", "}
@@ -132,8 +132,8 @@ function PluginSettings() {
                         ))}</div>
                     </>
                 ),
-                confirmText: "Restart now",
-                cancelText: "Later!",
+                confirmText: "지금 재시작",
+                cancelText: "나중에",
                 onConfirm: () => location.reload()
             });
     }, []);
@@ -227,7 +227,7 @@ function PluginSettings() {
 
         if (isRequired) {
             const tooltipText = p.required || !depMap[p.name]
-                ? "This plugin is required for Vencord to function."
+                ? "이 플러그인은 Vencord 동작에 필수입니다."
                 : makeDependencyList(depMap[p.name]?.filter(d => settings.plugins[d].enabled));
 
             requiredPlugins.push(
@@ -264,23 +264,23 @@ function PluginSettings() {
             <UIElementsButton />
 
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
-                Filters
+                필터
             </HeadingTertiary>
 
             <div className={classes(Margins.bottom20, cl("filter-controls"))}>
                 <ErrorBoundary noop>
-                    <TextInput autoFocus value={searchValue.value} placeholder="Search for a plugin..." onChange={onSearch} />
+                    <TextInput autoFocus value={searchValue.value} placeholder="플러그인 검색..." onChange={onSearch} />
                 </ErrorBoundary>
                 <div>
                     <ErrorBoundary noop>
                         <Select
                             options={[
-                                { label: "Show All", value: SearchStatus.ALL, default: true },
-                                { label: "Show Enabled", value: SearchStatus.ENABLED },
-                                { label: "Show Disabled", value: SearchStatus.DISABLED },
-                                { label: "Show New", value: SearchStatus.NEW },
-                                hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
-                                { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
+                                { label: "모두 보기", value: SearchStatus.ALL, default: true },
+                                { label: "사용 중인 플러그인", value: SearchStatus.ENABLED },
+                                { label: "사용 중이 아닌 플러그인", value: SearchStatus.DISABLED },
+                                { label: "새 플러그인", value: SearchStatus.NEW },
+                                hasUserPlugins && { label: "사용자 플러그인만", value: SearchStatus.USER_PLUGINS },
+                                { label: "API 플러그인만", value: SearchStatus.API_PLUGINS },
                             ].filter(isTruthy)}
                             serialize={String}
                             select={onStatusChange}
@@ -298,7 +298,7 @@ function PluginSettings() {
                     <div className={cl("grid")}>
                         {plugins.length
                             ? plugins
-                            : <Paragraph>No plugins meet the search criteria.</Paragraph>
+                            : <Paragraph>검색 조건에 맞는 플러그인이 없습니다.</Paragraph>
                         }
                     </div>
                 )
@@ -309,12 +309,12 @@ function PluginSettings() {
             <Divider className={Margins.top20} />
 
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
-                Required Plugins
+                필수 플러그인
             </HeadingTertiary>
             <div className={cl("grid")}>
                 {requiredPlugins.length
                     ? requiredPlugins
-                    : <Paragraph>No plugins meet the search criteria.</Paragraph>
+                    : <Paragraph>검색 조건에 맞는 플러그인이 없습니다.</Paragraph>
                 }
             </div>
         </SettingsTab >
@@ -324,10 +324,10 @@ function PluginSettings() {
 function makeDependencyList(deps: string[]) {
     return (
         <>
-            <Paragraph>This plugin is required by:</Paragraph>
+            <Paragraph>이 플러그인을 필요로 하는 항목:</Paragraph>
             {deps.map((dep: string) => <Paragraph key={dep} className={cl("dep-text")}>{dep}</Paragraph>)}
         </>
     );
 }
 
-export default wrapTab(PluginSettings, "Plugins");
+export default wrapTab(PluginSettings, "플러그인");

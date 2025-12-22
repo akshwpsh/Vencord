@@ -20,7 +20,7 @@ import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
 import { Margins } from "@utils/margins";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { Forms, SearchableSelect, useMemo } from "@webpack/common";
+import { Forms, SearchableSelect, TextInput, useMemo } from "@webpack/common";
 
 import { settings } from "./settings";
 import { cl, getLanguages } from "./utils";
@@ -49,7 +49,7 @@ function LanguageSelect({ settingsKey, includeAuto }: { settingsKey: typeof Lang
             <SearchableSelect
                 options={options}
                 value={options.find(o => o.value === currentValue)?.value}
-                placeholder="Select a language"
+                placeholder={"언어를 선택하세요"}
                 maxVisibleItems={5}
                 closeOnSelect={true}
                 onChange={v => settings.store[settingsKey] = v}
@@ -63,12 +63,44 @@ function AutoTranslateToggle() {
 
     return (
         <FormSwitch
-            title="Auto Translate"
+            title="자동 번역 (보내기)"
             description={settings.def.autoTranslate.description}
             value={value}
             onChange={v => settings.store.autoTranslate = v}
             hideBorder
         />
+    );
+}
+
+function AutoTranslateReceivedToggle() {
+    const value = settings.use(["autoTranslateReceived"]).autoTranslateReceived;
+
+    return (
+        <FormSwitch
+            title="자동 번역 (받기)"
+            description={settings.def.autoTranslateReceived.description}
+            value={value}
+            onChange={v => settings.store.autoTranslateReceived = v}
+            hideBorder
+        />
+    );
+}
+
+function GeminiApiKeyInput() {
+    const geminiApiKey = settings.use(["geminiApiKey"]).geminiApiKey;
+
+    return (
+        <section className={Margins.bottom16}>
+            <Forms.FormTitle tag="h3">
+                {settings.def.geminiApiKey.description}
+            </Forms.FormTitle>
+            <TextInput
+                value={geminiApiKey}
+                onChange={(v: string) => settings.store.geminiApiKey = v}
+                placeholder={settings.def.geminiApiKey.placeholder}
+                type="password"
+            />
+        </section>
     );
 }
 
@@ -78,7 +110,7 @@ export function TranslateModal({ rootProps }: { rootProps: ModalProps; }) {
         <ModalRoot {...rootProps}>
             <ModalHeader className={cl("modal-header")}>
                 <Forms.FormTitle tag="h2" className={cl("modal-title")}>
-                    Translate
+                    번역
                 </Forms.FormTitle>
                 <ModalCloseButton onClick={rootProps.onClose} />
             </ModalHeader>
@@ -95,6 +127,14 @@ export function TranslateModal({ rootProps }: { rootProps: ModalProps; }) {
                 <Divider className={Margins.bottom16} />
 
                 <AutoTranslateToggle />
+                <AutoTranslateReceivedToggle />
+
+                {settings.store.service === "gemini" && (
+                    <>
+                        <Divider className={Margins.bottom16} />
+                        <GeminiApiKeyInput />
+                    </>
+                )}
             </ModalContent>
         </ModalRoot>
     );

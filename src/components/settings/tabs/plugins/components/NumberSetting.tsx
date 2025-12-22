@@ -53,7 +53,7 @@ export function NumberSetting({ option, pluginSettings, definedSettings, id, onC
             <TextInput
                 type="number"
                 pattern="-?[0-9]+"
-                placeholder={option.placeholder ?? "Enter a number"}
+                placeholder={option.placeholder ?? "숫자를 입력하세요"}
                 value={state}
                 onChange={handleChange}
                 disabled={option.disabled?.call(definedSettings) ?? false}

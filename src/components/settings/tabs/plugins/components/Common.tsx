@@ -30,7 +30,7 @@ export type ComponentSettingProps<T extends Omit<PluginOptionBase, "description"
 export function resolveError(isValidResult: boolean | string) {
     if (typeof isValidResult === "string") return isValidResult;
 
-    return isValidResult ? null : "Invalid input provided";
+    return isValidResult ? null : "입력값이 올바르지 않습니다";
 }
 
 interface SettingsSectionProps extends PropsWithChildren {

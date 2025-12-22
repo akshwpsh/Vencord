@@ -302,6 +302,8 @@ export const DeeplLanguages = {
     "zu": "Zulu"
 } as const;
 
+export const GeminiLanguages = GoogleLanguages;
+
 export function deeplLanguageToGoogleLanguage(language: string) {
     switch (language) {
         case "": return "auto";

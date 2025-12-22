@@ -15,34 +15,34 @@ export function VibrancySettings() {
 
     return (
         <>
-            <Forms.FormTitle tag="h5">Window vibrancy style (requires restart)</Forms.FormTitle>
+            <Forms.FormTitle tag="h5">창 비브런시 스타일(재시작 필요)</Forms.FormTitle>
             <ErrorBoundary noop>
                 <Select
                     className={Margins.bottom20}
-                    placeholder="Window vibrancy style"
+                    placeholder="창 비브런시 스타일"
                     options={[
                         // Sorted from most opaque to most transparent
                         {
-                            label: "No vibrancy", value: undefined
+                            label: "비브런시 사용 안 함", value: undefined
                         },
                         {
-                            label: "Under Page (window tinting)",
+                            label: "Under Page (창 틴팅)",
                             value: "under-page"
                         },
                         {
-                            label: "Content",
+                            label: "Content (내용)",
                             value: "content"
                         },
                         {
-                            label: "Window",
+                            label: "Window (창)",
                             value: "window"
                         },
                         {
-                            label: "Selection",
+                            label: "Selection (선택 영역)",
                             value: "selection"
                         },
                         {
-                            label: "Titlebar",
+                            label: "Titlebar (제목 표시줄)",
                             value: "titlebar"
                         },
                         {
@@ -50,15 +50,15 @@ export function VibrancySettings() {
                             value: "header"
                         },
                         {
-                            label: "Sidebar",
+                            label: "Sidebar (사이드바)",
                             value: "sidebar"
                         },
                         {
-                            label: "Tooltip",
+                            label: "Tooltip (툴팁)",
                             value: "tooltip"
                         },
                         {
-                            label: "Menu",
+                            label: "Menu (메뉴)",
                             value: "menu"
                         },
                         {
@@ -66,11 +66,11 @@ export function VibrancySettings() {
                             value: "popover"
                         },
                         {
-                            label: "Fullscreen UI (transparent but slightly muted)",
+                            label: "전체 화면 UI (투명하지만 약간 차분함)",
                             value: "fullscreen-ui"
                         },
                         {
-                            label: "HUD (Most transparent)",
+                            label: "HUD (가장 투명)",
                             value: "hud"
                         },
                     ]}

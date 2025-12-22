@@ -20,6 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { BackupRestoreIcon, CloudIcon, MainSettingsIcon, PaintbrushIcon, PatchHelperIcon, PlaceholderIcon, PluginsIcon, UpdaterIcon, VesktopSettingsIcon } from "@components/Icons";
 import { BackupAndRestoreTab, CloudTab, PatchHelperTab, PluginsTab, ThemesTab, UpdaterTab, VencordTab } from "@components/settings/tabs";
 import { Devs } from "@utils/constants";
+import { getIntlMessage } from "@utils/discord";
 import { isTruthy } from "@utils/guards";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
 import { waitFor } from "@webpack";
@@ -79,36 +80,25 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the Vencord settings section",
+        description: "Vencord 설정 섹션을 어디에 배치할지",
         options: [
-            { label: "At the very top", value: "top" },
-            { label: "Above the Nitro section", value: "aboveNitro", default: true },
-            { label: "Below the Nitro section", value: "belowNitro" },
-            { label: "Above Activity Settings", value: "aboveActivity" },
-            { label: "Below Activity Settings", value: "belowActivity" },
-            { label: "At the very bottom", value: "bottom" },
+            { label: "맨 위에 배치", value: "top" },
+            { label: "니트로 섹션 위", value: "aboveNitro", default: true },
+            { label: "니트로 섹션 아래", value: "belowNitro" },
+            { label: "활동 설정 위", value: "aboveActivity" },
+            { label: "활동 설정 아래", value: "belowActivity" },
+            { label: "맨 아래에 배치", value: "bottom" },
         ] as { label: string; value: SettingsLocation; default?: boolean; }[]
     }
 });
 
-const settingsSectionMap: [string, string][] = [
-    ["VencordSettings", "vencord_main_panel"],
-    ["VencordPlugins", "vencord_plugins_panel"],
-    ["VencordThemes", "vencord_themes_panel"],
-    ["VencordUpdater", "vencord_updater_panel"],
-    ["VencordCloud", "vencord_cloud_panel"],
-    ["VencordBackupAndRestore", "vencord_backup_restore_panel"],
-    ["VencordPatchHelper", "vencord_patch_helper_panel"]
-];
-
 export default definePlugin({
     name: "Settings",
-    description: "Adds Settings UI and debug info",
+    description: "설정 UI와 디버그 정보를 추가합니다",
     authors: [Devs.Ven, Devs.Megu],
     required: true,
 
     settings,
-    settingsSectionMap,
 
     patches: [
         {
@@ -133,6 +123,27 @@ export default definePlugin({
                     replace: "$& + $self.getInfoString()"
                 }
             ]
+        },
+        {
+            find: ".SEARCH_NO_RESULTS&&0===",
+            replacement: [
+                {
+                    match: /(?<=section:(.{0,50})\.DIVIDER\}\))([,;])(?=.{0,200}(\i)\.push.{0,100}label:(\i)\.header)/,
+                    replace: (_, sectionTypes, commaOrSemi, elements, element) => `${commaOrSemi} $self.addSettings(${elements}, ${element}, ${sectionTypes}) ${commaOrSemi}`
+                },
+                {
+                    match: /({(?=.+?function (\i).{0,160}(\i)=\i\.useMemo.{0,140}return \i\.useMemo\(\(\)=>\i\(\3).+?\(\)=>)\2/,
+                    replace: (_, rest, settingsHook) => `${rest}$self.wrapSettingsHook(${settingsHook})`
+                }
+            ]
+        },
+        {
+            find: "#{intl::USER_SETTINGS_ACTIONS_MENU_LABEL}",
+            replacement: {
+                // Skip the check Discord performs to make sure the section being selected in the user settings context menu is valid
+                match: /null!=\(\i=Object.values\(\i\.\i\).{0,50}?&&(?=\(0,\i\.openUserSettings\)\(\i,\{section:\i)/,
+                replace: ""
+            }
         },
         {
             find: ".buildLayout().map",
@@ -194,7 +205,15 @@ export default definePlugin({
     },
 
     getSettingsSectionMappings() {
-        return settingsSectionMap;
+        return [
+            ["VencordSettings", "vencord_main_panel"],
+            ["VencordPlugins", "vencord_plugins_panel"],
+            ["VencordThemes", "vencord_themes_panel"],
+            ["VencordUpdater", "vencord_updater_panel"],
+            ["VencordCloud", "vencord_cloud_panel"],
+            ["VencordBackupAndRestore", "vencord_backup_restore_panel"],
+            ["VencordPatchHelper", "vencord_patch_helper_panel"]
+        ];
     },
 
     buildLayout(originalLayoutBuilder: SettingsLayoutBuilder) {
@@ -210,45 +229,45 @@ export default definePlugin({
             buildEntry({
                 key: "vencord_main",
                 title: "Vencord",
-                panelTitle: "Vencord Settings",
+                panelTitle: "Vencord 설정",
                 Component: VencordTab,
                 Icon: MainSettingsIcon
             }),
             buildEntry({
                 key: "vencord_plugins",
-                title: "Plugins",
+                title: "플러그인",
                 Component: PluginsTab,
                 Icon: PluginsIcon
             }),
             buildEntry({
                 key: "vencord_themes",
-                title: "Themes",
+                title: "테마",
                 Component: ThemesTab,
                 Icon: PaintbrushIcon
             }),
             !IS_UPDATER_DISABLED && UpdaterTab && buildEntry({
                 key: "vencord_updater",
-                title: "Updater",
-                panelTitle: "Vencord Updater",
+                title: "업데이트",
+                panelTitle: "Vencord 업데이트",
                 Component: UpdaterTab,
                 Icon: UpdaterIcon
             }),
             buildEntry({
                 key: "vencord_cloud",
-                title: "Cloud",
-                panelTitle: "Vencord Cloud",
+                title: "클라우드",
+                panelTitle: "Vencord 클라우드",
                 Component: CloudTab,
                 Icon: CloudIcon
             }),
             buildEntry({
                 key: "vencord_backup_restore",
-                title: "Backup & Restore",
+                title: "백업 및 복원",
                 Component: BackupAndRestoreTab,
                 Icon: BackupRestoreIcon
             }),
             IS_DEV && PatchHelperTab && buildEntry({
                 key: "vencord_patch_helper",
-                title: "Patch Helper",
+                title: "패치 헬퍼",
                 Component: PatchHelperTab,
                 Icon: PatchHelperIcon
             }),
@@ -302,6 +321,111 @@ export default definePlugin({
     /** @deprecated Use customEntries */
     customSections: [] as ((SectionTypes: SectionTypes) => any)[],
     customEntries: [] as EntryOptions[],
+
+    makeSettingsCategories(SectionTypes: SectionTypes) {
+        return [
+            {
+                section: SectionTypes.HEADER,
+                label: "Vencord",
+                className: "vc-settings-header"
+            },
+            {
+                section: "VencordSettings",
+                label: "Vencord",
+                element: VencordTab,
+                className: "vc-settings"
+            },
+            {
+                section: "VencordPlugins",
+                label: "플러그인",
+                element: PluginsTab,
+                className: "vc-plugins"
+            },
+            {
+                section: "VencordThemes",
+                label: "테마",
+                element: ThemesTab,
+                className: "vc-themes"
+            },
+            !IS_UPDATER_DISABLED && {
+                section: "VencordUpdater",
+                label: "업데이트",
+                element: UpdaterTab,
+                className: "vc-updater"
+            },
+            {
+                section: "VencordCloud",
+                label: "클라우드",
+                element: CloudTab,
+                className: "vc-cloud"
+            },
+            {
+                section: "VencordBackupAndRestore",
+                label: "백업 및 복원",
+                element: BackupAndRestoreTab,
+                className: "vc-backup-restore"
+            },
+            IS_DEV && {
+                section: "VencordPatchHelper",
+                label: "패치 헬퍼",
+                element: PatchHelperTab,
+                className: "vc-patch-helper"
+            },
+            ...this.customSections.map(func => func(SectionTypes)),
+            {
+                section: SectionTypes.DIVIDER
+            }
+        ].filter(Boolean);
+    },
+
+    isRightSpot({ header, settings: s }: { header?: string; settings?: string[]; }) {
+        const firstChild = s?.[0];
+        // lowest two elements... sanity backup
+        if (firstChild === "LOGOUT" || firstChild === "SOCIAL_LINKS") return true;
+
+        const { settingsLocation } = settings.store;
+
+        if (settingsLocation === "bottom") return firstChild === "LOGOUT";
+        if (settingsLocation === "belowActivity") return firstChild === "CHANGELOG";
+
+        if (!header) return;
+
+        try {
+            const names: Record<Exclude<SettingsLocation, "bottom" | "belowActivity">, string> = {
+                top: getIntlMessage("USER_SETTINGS"),
+                aboveNitro: getIntlMessage("BILLING_SETTINGS"),
+                belowNitro: getIntlMessage("APP_SETTINGS"),
+                aboveActivity: getIntlMessage("ACTIVITY_SETTINGS")
+            };
+
+            if (!names[settingsLocation] || names[settingsLocation].endsWith("_SETTINGS"))
+                return firstChild === "PREMIUM";
+
+            return header === names[settingsLocation];
+        } catch {
+            return firstChild === "PREMIUM";
+        }
+    },
+
+    patchedSettings: new WeakSet(),
+
+    addSettings(elements: any[], element: { header?: string; settings: string[]; }, sectionTypes: SectionTypes) {
+        if (this.patchedSettings.has(elements) || !this.isRightSpot(element)) return;
+
+        this.patchedSettings.add(elements);
+
+        elements.push(...this.makeSettingsCategories(sectionTypes));
+    },
+
+    wrapSettingsHook(originalHook: (...args: any[]) => Record<string, unknown>[]) {
+        return (...args: any[]) => {
+            const elements = originalHook(...args);
+            if (!this.patchedSettings.has(elements))
+                elements.unshift(...this.makeSettingsCategories(FallbackSectionTypes));
+
+            return elements;
+        };
+    },
 
     get electronVersion() {
         return VencordNative.native.getVersions().electron || window.legcord?.electron || null;

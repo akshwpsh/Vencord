@@ -86,24 +86,24 @@ export function LocalThemesTab() {
     return (
         <Flex flexDirection="column" gap="1em">
             <Card>
-                <Forms.FormTitle tag="h5">Find Themes:</Forms.FormTitle>
+                <Forms.FormTitle tag="h5">테마 찾기:</Forms.FormTitle>
                 <div style={{ marginBottom: ".5em", display: "flex", flexDirection: "column" }}>
                     <Link style={{ marginRight: ".5em" }} href="https://betterdiscord.app/themes">
                         BetterDiscord Themes
                     </Link>
                     <Link href="https://github.com/search?q=discord+theme">GitHub</Link>
                 </div>
-                <Forms.FormText>If using the BD site, click on "Download" and place the downloaded .theme.css file into your themes folder.</Forms.FormText>
+                <Forms.FormText>BD 사이트를 이용한다면 "Download"를 클릭한 뒤 내려받은 .theme.css 파일을 테마 폴더에 넣어주세요.</Forms.FormText>
             </Card>
 
             <Card>
-                <Forms.FormTitle tag="h5">External Resources</Forms.FormTitle>
-                <Forms.FormText>For security reasons, loading resources (styles, fonts, images, ...) from most sites is blocked.</Forms.FormText>
-                <Forms.FormText>Make sure all your assets are hosted on GitHub, GitLab, Codeberg, Imgur, Discord or Google Fonts.</Forms.FormText>
+                <Forms.FormTitle tag="h5">외부 리소스</Forms.FormTitle>
+                <Forms.FormText>보안을 위해 대부분의 사이트에서 리소스(스타일, 폰트, 이미지 등)를 불러오는 것이 차단됩니다.</Forms.FormText>
+                <Forms.FormText>모든 에셋을 GitHub, GitLab, Codeberg, Imgur, Discord 또는 Google Fonts에 호스팅했는지 확인하세요.</Forms.FormText>
             </Card>
 
             <section>
-                <Forms.FormTitle tag="h5">Local Themes</Forms.FormTitle>
+                <Forms.FormTitle tag="h5">로컬 테마</Forms.FormTitle>
                 <QuickActionCard>
                     <>
                         {IS_WEB ?
@@ -111,7 +111,7 @@ export function LocalThemesTab() {
                                 <QuickAction
                                     text={
                                         <span style={{ position: "relative" }}>
-                                            Upload Theme
+                                            테마 업로드
                                             <FileInput
                                                 ref={fileInputRef}
                                                 onChange={async e => {
@@ -127,25 +127,25 @@ export function LocalThemesTab() {
                                 />
                             ) : (
                                 <QuickAction
-                                    text="Open Themes Folder"
+                                    text="테마 폴더 열기"
                                     action={() => VencordNative.themes.openFolder()}
                                     Icon={FolderIcon}
                                 />
                             )}
                         <QuickAction
-                            text="Load missing Themes"
+                            text="누락된 테마 다시 로드"
                             action={refreshLocalThemes}
                             Icon={RestartIcon}
                         />
                         <QuickAction
-                            text="Edit QuickCSS"
+                            text="QuickCSS 편집"
                             action={() => VencordNative.quickCss.openEditor()}
                             Icon={PaintbrushIcon}
                         />
 
                         {isPluginEnabled(ClientThemePlugin.name) && (
                             <QuickAction
-                                text="Edit ClientTheme"
+                                text="ClientTheme 편집"
                                 action={() => openPluginModal(ClientThemePlugin)}
                                 Icon={PencilIcon}
                             />
