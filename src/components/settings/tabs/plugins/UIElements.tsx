@@ -30,10 +30,10 @@ export function UIElementsButton() {
             <Card className={cl("button")} defaultPadding>
                 <div className={cl("button-description")}>
                     <Paragraph size="md" weight="semibold">
-                        Manage plugin UI elements
+                        플러그인 UI 요소 관리
                     </Paragraph>
                     <Paragraph size="xs">
-                        Allows you to hide buttons you don't like
+                        필요 없는 버튼을 숨길 수 있습니다
                     </Paragraph>
                 </div>
                 <svg
@@ -97,14 +97,14 @@ function UIElementsModal(props: ModalProps) {
         <ModalRoot {...props} size={ModalSize.MEDIUM}>
             <ModalContent className={cl("modal-content")}>
                 <Section
-                    title="Chatbar Buttons"
-                    description="These are the buttons on the right side of the chat input bar"
+                    title="채팅창 버튼"
+                    description="채팅 입력창 오른쪽에 있는 버튼들입니다"
                     buttonMap={ChatBarButtonMap}
                     settings={uiElements.chatBarButtons}
                 />
                 <Section
-                    title="Message Popover Buttons"
-                    description="These are the floating buttons on the right when you hover over a message"
+                    title="메시지 팝오버 버튼"
+                    description="메시지에 마우스를 올렸을 때 오른쪽에 뜨는 버튼들입니다"
                     buttonMap={MessagePopoverButtonMap}
                     settings={uiElements.messagePopoverButtons}
                 />

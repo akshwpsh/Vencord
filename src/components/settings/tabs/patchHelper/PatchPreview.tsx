@@ -53,7 +53,7 @@ function Match({ matchResult }: { matchResult: RegExpMatchArray | null; }) {
 
     return (
         <>
-            <Forms.FormTitle>Match</Forms.FormTitle>
+            <Forms.FormTitle>매칭 결과</Forms.FormTitle>
             <div style={{ userSelect: "text" }}>{Parser.parse(fullMatch)}</div>
             <div style={{ userSelect: "text" }}>{Parser.parse(groups)}</div>
         </>
@@ -83,7 +83,7 @@ function Diff({ diff }: { diff: Change[] | null; }) {
 
     return (
         <>
-            <Forms.FormTitle>Diff</Forms.FormTitle>
+            <Forms.FormTitle>차이</Forms.FormTitle>
             {diffLines}
         </>
     );
@@ -118,7 +118,7 @@ export function PatchPreview({ module, match, replacement, setReplacementError }
 
     return (
         <>
-            <Forms.FormTitle>Module {id}</Forms.FormTitle>
+            <Forms.FormTitle>모듈 {id}</Forms.FormTitle>
 
             <Match matchResult={matchResult} />
             <Diff diff={diff} />
@@ -129,13 +129,13 @@ export function PatchPreview({ module, match, replacement, setReplacementError }
                     onClick={() => {
                         try {
                             Function(patchedCode.replace(/^(?=function\()/, "0,"));
-                            setCompileResult([true, "Compiled successfully"]);
+                            setCompileResult([true, "컴파일 성공"]);
                         } catch (err) {
                             setCompileResult([false, (err as Error).message]);
                         }
                     }}
                 >
-                    Compile
+                    컴파일
                 </Button>
             )}
 

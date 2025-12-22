@@ -60,7 +60,7 @@ export function Newer(props: CommonProps) {
     return (
         <>
             <Forms.FormText className={Margins.bottom8}>
-                Your local copy has more recent commits. Please stash or reset them.
+                로컬 사본에 더 최신 커밋이 있습니다. stash하거나 되돌려주세요.
             </Forms.FormText>
             <Changes {...props} updates={changes} />
         </>
@@ -78,14 +78,14 @@ export function Updatable(props: CommonProps) {
         <>
             {!updates && updateError ? (
                 <>
-                    <Forms.FormText>Failed to check updates. Check the console for more info</Forms.FormText>
+                    <Forms.FormText>업데이트 확인에 실패했습니다. 콘솔에서 자세히 확인하세요</Forms.FormText>
                     <ErrorCard style={{ padding: "1em" }}>
-                        <p>{updateError.stderr || updateError.stdout || "An unknown error occurred"}</p>
+                        <p>{updateError.stderr || updateError.stdout || "알 수 없는 오류가 발생했습니다"}</p>
                     </ErrorCard>
                 </>
             ) : (
                 <Forms.FormText className={Margins.bottom8}>
-                    {isOutdated ? (updates.length === 1 ? "There is 1 Update" : `There are ${updates.length} Updates`) : "Up to Date!"}
+                    {isOutdated ? (updates.length === 1 ? "업데이트 1개가 있습니다" : `업데이트 ${updates.length}개가 있습니다`) : "최신 상태입니다!"}
                 </Forms.FormText>
             )}
 
@@ -102,10 +102,10 @@ export function Updatable(props: CommonProps) {
 
                                 await new Promise<void>(r => {
                                     Alerts.show({
-                                        title: "Update Success!",
-                                        body: "Successfully updated. Restart now to apply the changes?",
-                                        confirmText: "Restart",
-                                        cancelText: "Not now!",
+                                        title: "업데이트 완료!",
+                                        body: "업데이트를 완료했습니다. 변경 사항을 적용하려면 지금 재시작할까요?",
+                                        confirmText: "재시작",
+                                        cancelText: "나중에",
                                         onConfirm() {
                                             relaunch();
                                             r();
@@ -131,7 +131,7 @@ export function Updatable(props: CommonProps) {
                             setUpdates([]);
 
                             Toasts.show({
-                                message: "No updates found!",
+                                message: "새 업데이트가 없습니다!",
                                 id: Toasts.genId(),
                                 type: Toasts.Type.MESSAGE,
                                 options: {

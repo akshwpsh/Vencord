@@ -60,7 +60,7 @@ function ContributorModal({ user }: { user: User; }) {
             .sort((a, b) => Number(a.required ?? false) - Number(b.required ?? false));
     }, [user.id, user.username]);
 
-    const ContributedHyperLink = <Link href="https://vencord.dev/source">contributed</Link>;
+    const ContributedHyperLink = <Link href="https://vencord.dev/source">기여했습니다</Link>;
 
     return (
         <>
@@ -90,11 +90,11 @@ function ContributorModal({ user }: { user: User; }) {
 
             {plugins.length ? (
                 <Forms.FormText>
-                    This person has {ContributedHyperLink} to {pluralise(plugins.length, "plugin")}!
+                    이 사용자는 플러그인 {plugins.length}개에 {ContributedHyperLink}!
                 </Forms.FormText>
             ) : (
                 <Forms.FormText>
-                    This person has not made any plugins. They likely {ContributedHyperLink} to Vencord in other ways!
+                    이 사용자는 플러그인을 만들지 않았지만, 다른 방식으로 Vencord에 {ContributedHyperLink}!
                 </Forms.FormText>
             )}
 

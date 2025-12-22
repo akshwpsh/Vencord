@@ -30,31 +30,31 @@ function BackupAndRestoreTab() {
         <SettingsTab>
             <Flex flexDirection="column" gap="0.5em">
                 <Card variant="warning">
-                    <Heading tag="h4">Warning</Heading>
-                    <Paragraph>Importing a settings file will overwrite your current settings.</Paragraph>
+                    <Heading tag="h4">경고</Heading>
+                    <Paragraph>설정 파일을 불러오면 현재 설정이 덮어씌워집니다.</Paragraph>
                 </Card>
 
                 <Text variant="text-md/normal" className={Margins.bottom8}>
-                    You can import and export your Vencord settings as a JSON file.
-                    This allows you to easily transfer your settings to another device,
-                    or recover your settings after reinstalling Vencord or Discord.
+                    Vencord 설정을 JSON 파일로 내보내거나 불러올 수 있습니다.
+                    이를 통해 다른 기기로 설정을 옮기거나,
+                    Vencord나 Discord를 재설치한 뒤 설정을 복구할 수 있습니다.
                 </Text>
 
-                <Heading tag="h4">Settings Export contains:</Heading>
+                <Heading tag="h4">내보내기 항목:</Heading>
                 <Text variant="text-md/normal" className={Margins.bottom8}>
                     <ul>
-                        <li>&mdash; Custom QuickCSS</li>
-                        <li>&mdash; Theme Links</li>
-                        <li>&mdash; Plugin Settings</li>
+                        <li>&mdash; 커스텀 QuickCSS</li>
+                        <li>&mdash; 테마 링크</li>
+                        <li>&mdash; 플러그인 설정</li>
                     </ul>
                 </Text>
 
                 <Flex>
                     <Button onClick={() => uploadSettingsBackup()}>
-                        Import Settings
+                        설정 불러오기
                     </Button>
                     <Button onClick={downloadSettingsBackup}>
-                        Export Settings
+                        설정 내보내기
                     </Button>
                 </Flex>
             </Flex>
@@ -62,4 +62,4 @@ function BackupAndRestoreTab() {
     );
 }
 
-export default wrapTab(BackupAndRestoreTab, "Backup & Restore");
+export default wrapTab(BackupAndRestoreTab, "백업 및 복원");

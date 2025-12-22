@@ -41,7 +41,7 @@ export function SelectSetting({ option, pluginSettings, definedSettings, onChang
     return (
         <SettingsSection name={id} description={option.description} error={error}>
             <Select
-                placeholder={option.placeholder ?? "Select an option"}
+                placeholder={option.placeholder ?? "옵션을 선택하세요"}
                 options={option.options}
                 maxVisibleItems={5}
                 closeOnSelect={true}

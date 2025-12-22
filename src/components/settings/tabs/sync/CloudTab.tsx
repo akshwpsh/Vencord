@@ -42,7 +42,7 @@ function validateUrl(url: string) {
         new URL(url);
         return true;
     } catch {
-        return "Invalid URL";
+        return "유효하지 않은 URL";
     }
 }
 
@@ -71,18 +71,17 @@ function CloudSetupSection() {
 
     return (
         <section>
-            <SectionHeading text="Cloud Integrations" />
+            <SectionHeading text="클라우드 연동" />
 
             <Paragraph size="md" className={Margins.bottom20}>
-                Vencord comes with a cloud integration that adds goodies like settings sync across devices.
-                It <Link href="https://vencord.dev/cloud/privacy">respects your privacy</Link>, and
-                the <Link href="https://github.com/Vencord/Backend">source code</Link> is AGPL 3.0 licensed so you
-                can host it yourself.
+                Vencord는 기기 간 설정 동기화 등을 제공하는 클라우드 연동을 지원합니다.
+                <Link href="https://vencord.dev/cloud/privacy">개인정보를 존중하며</Link>,
+                <Link href="https://github.com/Vencord/Backend">소스 코드</Link>는 AGPL 3.0 라이선스로 제공되어 직접 호스팅할 수도 있습니다.
             </Paragraph>
             <FormSwitch
                 key="backend"
-                title="Enable Cloud Integrations"
-                description="This will request authorization if you have not yet set up cloud integrations."
+                title="클라우드 연동 활성화"
+                description="아직 설정하지 않았다면 인증을 요청합니다."
                 value={cloud.authenticated}
                 onChange={v => {
                     if (v)
@@ -91,9 +90,9 @@ function CloudSetupSection() {
                         cloud.authenticated = v;
                 }}
             />
-            <Heading tag="h5" className={Margins.top16}>Backend URL</Heading>
+            <Heading tag="h5" className={Margins.top16}>백엔드 URL</Heading>
             <Paragraph className={Margins.bottom8}>
-                Which backend to use when using cloud integrations.
+                클라우드 연동 시 사용할 백엔드 주소입니다.
             </Paragraph>
             <CheckedTextInput
                 key="backendUrl"
@@ -117,7 +116,7 @@ function CloudSetupSection() {
                     }}
                     Icon={RestartIcon}
                 >
-                    Reauthorise
+                    다시 인증
                 </ButtonWithIcon>
             </Grid>
         </section>
@@ -130,12 +129,12 @@ function SettingsSyncSection() {
 
     return (
         <section>
-            <SectionHeading text="Settings Sync" />
+            <SectionHeading text="설정 동기화" />
             <Flex flexDirection="column" gap="1em">
                 <FormSwitch
                     key="cloud-sync"
-                    title="Enable Settings Sync"
-                    description="Save your Vencord settings to the cloud so you can easily keep them the same on all your devices"
+                    title="설정 동기화 사용"
+                    description="Vencord 설정을 클라우드에 저장해 모든 기기에서 동일하게 유지합니다"
                     value={cloud.settingsSync}
                     onChange={v => { cloud.settingsSync = v; }}
                     disabled={!cloud.authenticated}
@@ -144,29 +143,29 @@ function SettingsSyncSection() {
 
                 <div>
                     <Heading tag="h5">
-                        Sync Rules for This Device
+                        이 기기의 동기화 규칙
                     </Heading>
                     <Paragraph className={Margins.bottom8}>
-                        This setting controls how settings move between <strong>this device</strong> and the cloud.
-                        You can let changes flow both ways, or choose one place to be the main source of truth.
+                        <strong>이 기기</strong>와 클라우드 간 설정 이동 방식을 선택합니다.
+                        양방향으로 동기화하거나, 한 쪽을 기준으로 삼을 수 있습니다.
                     </Paragraph>
                     <Select
                         options={[
                             {
-                                label: "Two-way sync (changes go both directions)",
+                                label: "양방향 동기화 (변경 사항이 서로 동기화)",
                                 value: "both",
                                 default: true,
                             },
                             {
-                                label: "This device is the source (upload only)",
+                                label: "이 기기를 기준으로 함 (업로드만)",
                                 value: "push",
                             },
                             {
-                                label: "The cloud is the source (download only)",
+                                label: "클라우드를 기준으로 함 (다운로드만)",
                                 value: "pull",
                             },
                             {
-                                label: "Do not sync automatically (manual sync via buttons below only)",
+                                label: "자동 동기화 안 함 (아래 버튼으로 수동 동기화)",
                                 value: "manual",
                             }
                         ]}
@@ -186,9 +185,9 @@ function SettingsSyncSection() {
                         onClick={() => putCloudSettings(true)}
                         Icon={CloudUploadIcon}
                     >
-                        Upload Settings
+                        설정 업로드
                     </ButtonWithIcon>
-                    <Tooltip text="This will replace your current settings with the ones saved in the cloud. Be careful!">
+                    <Tooltip text="현재 설정을 클라우드에 저장된 값으로 덮어씁니다. 주의하세요!">
                         {({ onMouseLeave, onMouseEnter }) => (
                             <ButtonWithIcon
                                 variant="dangerPrimary"
@@ -198,7 +197,7 @@ function SettingsSyncSection() {
                                 onClick={() => getCloudSettings(true, true)}
                                 Icon={CloudDownloadIcon}
                             >
-                                Download Settings
+                                설정 다운로드
                             </ButtonWithIcon>
                         )}
                     </Tooltip>
@@ -213,7 +212,7 @@ function ResetSection() {
 
     return (
         <section>
-            <SectionHeading text="Reset Cloud Data" />
+            <SectionHeading text="클라우드 데이터 초기화" />
 
             <Grid columns={2} gap="1em">
                 <ButtonWithIcon
@@ -222,22 +221,22 @@ function ResetSection() {
                     onClick={() => deleteCloudSettings()}
                     Icon={DeleteIcon}
                 >
-                    Delete Settings from Cloud
+                    클라우드에 저장된 설정 삭제
                 </ButtonWithIcon>
                 <ButtonWithIcon
                     variant="dangerPrimary"
                     disabled={!authenticated}
                     onClick={() => Alerts.show({
-                        title: "Are you sure?",
-                        body: "Once your data is erased, we cannot recover it. There's no going back!",
+                        title: "정말 삭제할까요?",
+                        body: "데이터를 지우면 복구할 수 없습니다. 이 작업은 되돌릴 수 없습니다!",
                         onConfirm: eraseAllCloudData,
-                        confirmText: "Erase it!",
+                        confirmText: "삭제하기",
                         confirmColor: "vc-cloud-erase-data-danger-btn",
-                        cancelText: "Nevermind"
+                        cancelText: "취소"
                     })}
                     Icon={DeleteIcon}
                 >
-                    Delete your Cloud Account
+                    클라우드 계정 삭제
                 </ButtonWithIcon>
             </Grid>
         </section>
@@ -258,4 +257,4 @@ function CloudTab() {
     );
 }
 
-export default wrapTab(CloudTab, "Cloud");
+export default wrapTab(CloudTab, "클라우드");

@@ -49,13 +49,13 @@ function ThemesTab() {
                     className="vc-settings-tab-bar-item"
                     id={ThemeTab.LOCAL}
                 >
-                    Local Themes
+                    로컬 테마
                 </TabBar.Item>
                 <TabBar.Item
                     className="vc-settings-tab-bar-item"
                     id={ThemeTab.ONLINE}
                 >
-                    Online Themes
+                    온라인 테마
                 </TabBar.Item>
             </TabBar>
 
@@ -71,10 +71,10 @@ function UserscriptThemesTab() {
     return (
         <SettingsTab>
             <Card variant="danger">
-                <Forms.FormTitle tag="h5">Themes are not supported on the Userscript!</Forms.FormTitle>
+                <Forms.FormTitle tag="h5">유저스크립트에서는 테마가 지원되지 않습니다!</Forms.FormTitle>
 
                 <Forms.FormText>
-                    You can instead install themes with the <Link href={getStylusWebStoreUrl()}>Stylus extension</Link>!
+                    대신 <Link href={getStylusWebStoreUrl()}>Stylus 확장 프로그램</Link>으로 테마를 설치할 수 있습니다!
                 </Forms.FormText>
             </Card>
         </SettingsTab>
@@ -82,5 +82,5 @@ function UserscriptThemesTab() {
 }
 
 export default IS_USERSCRIPT
-    ? wrapTab(UserscriptThemesTab, "Themes")
-    : wrapTab(ThemesTab, "Themes");
+    ? wrapTab(UserscriptThemesTab, "테마")
+    : wrapTab(ThemesTab, "테마");

@@ -80,21 +80,21 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the Vencord settings section",
+        description: "Vencord 설정 섹션을 어디에 배치할지",
         options: [
-            { label: "At the very top", value: "top" },
-            { label: "Above the Nitro section", value: "aboveNitro", default: true },
-            { label: "Below the Nitro section", value: "belowNitro" },
-            { label: "Above Activity Settings", value: "aboveActivity" },
-            { label: "Below Activity Settings", value: "belowActivity" },
-            { label: "At the very bottom", value: "bottom" },
+            { label: "맨 위에 배치", value: "top" },
+            { label: "니트로 섹션 위", value: "aboveNitro", default: true },
+            { label: "니트로 섹션 아래", value: "belowNitro" },
+            { label: "활동 설정 위", value: "aboveActivity" },
+            { label: "활동 설정 아래", value: "belowActivity" },
+            { label: "맨 아래에 배치", value: "bottom" },
         ] as { label: string; value: SettingsLocation; default?: boolean; }[]
     }
 });
 
 export default definePlugin({
     name: "Settings",
-    description: "Adds Settings UI and debug info",
+    description: "설정 UI와 디버그 정보를 추가합니다",
     authors: [Devs.Ven, Devs.Megu],
     required: true,
 
@@ -229,45 +229,45 @@ export default definePlugin({
             buildEntry({
                 key: "vencord_main",
                 title: "Vencord",
-                panelTitle: "Vencord Settings",
+                panelTitle: "Vencord 설정",
                 Component: VencordTab,
                 Icon: MainSettingsIcon
             }),
             buildEntry({
                 key: "vencord_plugins",
-                title: "Plugins",
+                title: "플러그인",
                 Component: PluginsTab,
                 Icon: PluginsIcon
             }),
             buildEntry({
                 key: "vencord_themes",
-                title: "Themes",
+                title: "테마",
                 Component: ThemesTab,
                 Icon: PaintbrushIcon
             }),
             !IS_UPDATER_DISABLED && UpdaterTab && buildEntry({
                 key: "vencord_updater",
-                title: "Updater",
-                panelTitle: "Vencord Updater",
+                title: "업데이트",
+                panelTitle: "Vencord 업데이트",
                 Component: UpdaterTab,
                 Icon: UpdaterIcon
             }),
             buildEntry({
                 key: "vencord_cloud",
-                title: "Cloud",
-                panelTitle: "Vencord Cloud",
+                title: "클라우드",
+                panelTitle: "Vencord 클라우드",
                 Component: CloudTab,
                 Icon: CloudIcon
             }),
             buildEntry({
                 key: "vencord_backup_restore",
-                title: "Backup & Restore",
+                title: "백업 및 복원",
                 Component: BackupAndRestoreTab,
                 Icon: BackupRestoreIcon
             }),
             IS_DEV && PatchHelperTab && buildEntry({
                 key: "vencord_patch_helper",
-                title: "Patch Helper",
+                title: "패치 헬퍼",
                 Component: PatchHelperTab,
                 Icon: PatchHelperIcon
             }),
@@ -337,37 +337,37 @@ export default definePlugin({
             },
             {
                 section: "VencordPlugins",
-                label: "Plugins",
+                label: "플러그인",
                 element: PluginsTab,
                 className: "vc-plugins"
             },
             {
                 section: "VencordThemes",
-                label: "Themes",
+                label: "테마",
                 element: ThemesTab,
                 className: "vc-themes"
             },
             !IS_UPDATER_DISABLED && {
                 section: "VencordUpdater",
-                label: "Updater",
+                label: "업데이트",
                 element: UpdaterTab,
                 className: "vc-updater"
             },
             {
                 section: "VencordCloud",
-                label: "Cloud",
+                label: "클라우드",
                 element: CloudTab,
                 className: "vc-cloud"
             },
             {
                 section: "VencordBackupAndRestore",
-                label: "Backup & Restore",
+                label: "백업 및 복원",
                 element: BackupAndRestoreTab,
                 className: "vc-backup-restore"
             },
             IS_DEV && {
                 section: "VencordPatchHelper",
-                label: "Patch Helper",
+                label: "패치 헬퍼",
                 element: PatchHelperTab,
                 className: "vc-patch-helper"
             },

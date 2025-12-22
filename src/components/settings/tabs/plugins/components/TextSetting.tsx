@@ -40,14 +40,14 @@ export function TextSetting({ option, pluginSettings, definedSettings, id, onCha
         <SettingsSection name={id} description={option.description} error={error}>
             {option.multiline
                 ? <TextArea
-                    placeholder={option.placeholder ?? "Enter a value"}
+                    placeholder={option.placeholder ?? "값을 입력하세요"}
                     value={state}
                     onChange={handleChange}
                     disabled={option.disabled?.call(definedSettings) ?? false}
                     {...option.componentProps} />
                 : <TextInput
                     type="text"
-                    placeholder={option.placeholder ?? "Enter a value"}
+                    placeholder={option.placeholder ?? "값을 입력하세요"}
                     value={state}
                     onChange={handleChange}
                     maxLength={null}

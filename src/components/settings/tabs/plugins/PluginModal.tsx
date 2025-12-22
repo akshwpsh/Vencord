@@ -95,7 +95,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
 
     function renderSettings() {
         if (!hasSettings || !plugin.options)
-            return <Forms.FormText>There are no settings for this plugin.</Forms.FormText>;
+            return <Forms.FormText>이 플러그인은 설정이 없습니다.</Forms.FormText>;
 
         const options = Object.entries(plugin.options).map(([key, setting]) => {
             if (setting.type === OptionType.CUSTOM || setting.hidden) return null;
@@ -166,17 +166,17 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                         {!pluginMeta.userPlugin && (
                             <div className="vc-settings-modal-links">
                                 <WebsiteButton
-                                    text="View more info"
+                                    text="자세히 보기"
                                     href={`https://vencord.dev/plugins/${plugin.name}`}
                                 />
                                 <GithubButton
-                                    text="View source code"
+                                    text="소스 코드 보기"
                                     href={`https://github.com/${gitRemote}/tree/main/src/plugins/${pluginMeta.folderName}`}
                                 />
                             </div>
                         )}
                     </Flex>
-                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>Authors</Text>
+                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>제작자</Text>
                     <div style={{ width: "fit-content" }}>
                         <ErrorBoundary noop>
                             <UserSummaryItem
@@ -207,7 +207,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 {!!plugin.settingsAboutComponent && (
                     <div className={Margins.top16}>
                         <section>
-                            <ErrorBoundary message="An error occurred while rendering this plugin's custom Info Component">
+                            <ErrorBoundary message="플러그인의 커스텀 정보 컴포넌트를 렌더링하는 중 오류가 발생했습니다">
                                 <plugin.settingsAboutComponent />
                             </ErrorBoundary>
                         </section>
@@ -215,7 +215,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 )}
 
                 <section>
-                    <Text variant="heading-lg/semibold" className={classes(Margins.top16, Margins.bottom8)}>Settings</Text>
+                    <Text variant="heading-lg/semibold" className={classes(Margins.top16, Margins.bottom8)}>설정</Text>
                     {renderSettings()}
                 </section>
             </ModalContent>

@@ -46,26 +46,26 @@ function Updater() {
     return (
         <SettingsTab>
             <FormSwitch
-                title="Automatically update"
-                description="Automatically update Vencord without confirmation prompt"
+                title="자동 업데이트"
+                description="확인 없이 Vencord를 자동으로 업데이트합니다"
                 value={settings.autoUpdate}
                 onChange={(v: boolean) => settings.autoUpdate = v}
             />
             <FormSwitch
-                title="Get notified when an automatic update completes"
-                description="Show a notification when Vencord automatically updates"
+                title="자동 업데이트 완료 시 알림 받기"
+                description="Vencord가 자동 업데이트되면 알림을 표시합니다"
                 value={settings.autoUpdateNotification}
                 onChange={(v: boolean) => settings.autoUpdateNotification = v}
                 disabled={!settings.autoUpdate}
             />
 
-            <Forms.FormTitle tag="h5">Repo</Forms.FormTitle>
+            <Forms.FormTitle tag="h5">저장소</Forms.FormTitle>
 
             <Forms.FormText>
                 {repoPending
                     ? repo
                     : err
-                        ? "Failed to retrieve - check console"
+                        ? "가져오지 못했습니다 - 콘솔을 확인하세요"
                         : (
                             <Link href={repo}>
                                 {repo.split("/").slice(-2).join("/")}
@@ -78,7 +78,7 @@ function Updater() {
 
             <Divider className={Margins.top8 + " " + Margins.bottom8} />
 
-            <Forms.FormTitle tag="h5">Updates</Forms.FormTitle>
+            <Forms.FormTitle tag="h5">업데이트</Forms.FormTitle>
 
             {isNewer
                 ? <Newer {...commonProps} />
@@ -90,4 +90,4 @@ function Updater() {
 
 export default IS_UPDATER_DISABLED
     ? null
-    : wrapTab(Updater, "Updater");
+    : wrapTab(Updater, "업데이트");
