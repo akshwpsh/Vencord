@@ -2,4 +2,5 @@
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
-git up
+git fetch upstream
+git pull --rebase --autostash upstream main
