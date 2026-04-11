@@ -22,8 +22,6 @@ lerna-debug.log*
 src/userplugins/*
 !src/userplugins/translate/
 !src/userplugins/translate/**
-!src/userplugins/vencordKorean/
-!src/userplugins/vencordKorean/**
 
 ExtensionCache/
 /settings
