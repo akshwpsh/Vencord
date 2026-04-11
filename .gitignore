@@ -19,7 +19,11 @@ lerna-debug.log*
 .pnpm-debug.log*
 *.tsbuildinfo
 
-src/userplugins
+src/userplugins/*
+!src/userplugins/translate/
+!src/userplugins/translate/**
+!src/userplugins/vencordKorean/
+!src/userplugins/vencordKorean/**
 
 ExtensionCache/
 /settings

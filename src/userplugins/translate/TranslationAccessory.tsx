@@ -1,0 +1,92 @@
+/*
+ * Vencord, a modification for Discord's desktop app
+ * Copyright (c) 2023 Vendicated and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { Message } from "@vencord/discord-types";
+import { Parser, useEffect, useState } from "@webpack/common";
+
+import { settings } from "./settings";
+import { TranslateIcon } from "./TranslateIcon";
+import { cl, translate, TranslationValue } from "./utils";
+
+const TranslationSetters = new Map<string, (v: TranslationValue) => void>();
+const AutoTranslatedMessages = new Set<string>();
+
+export function handleTranslate(messageId: string, data: TranslationValue) {
+    TranslationSetters.get(messageId)?.(data);
+}
+
+function getMessageContent(message: Message) {
+    return message.content
+        || message.messageSnapshots?.[0]?.message.content
+        || message.embeds?.find(embed => embed.type === "auto_moderation_message")?.rawDescription || "";
+}
+
+function Dismiss({ onDismiss }: { onDismiss: () => void; }) {
+    return (
+        <button
+            onClick={onDismiss}
+            className={cl("dismiss")}
+        >
+            닫기
+        </button>
+    );
+}
+
+export function TranslationAccessory({ message }: { message: Message; }) {
+    const [translation, setTranslation] = useState<TranslationValue>();
+
+    useEffect(() => {
+        if ((message as any).vencordEmbeddedBy) return;
+
+        TranslationSetters.set(message.id, setTranslation);
+
+        if (settings.store.autoTranslateReceived && !AutoTranslatedMessages.has(message.id)) {
+            const content = getMessageContent(message);
+            if (content) {
+                AutoTranslatedMessages.add(message.id);
+                translate("received", content)
+                    .then(trans => {
+                        if (trans.text !== content) {
+                            setTranslation(trans);
+                        }
+                    })
+                    .catch(() => {
+                        AutoTranslatedMessages.delete(message.id);
+                    });
+            }
+        }
+
+        return () => {
+            TranslationSetters.delete(message.id);
+            if (!translation) {
+                AutoTranslatedMessages.delete(message.id);
+            }
+        };
+    }, [message.id]);
+
+    if (!translation) return null;
+
+    return (
+        <span className={cl("accessory")}>
+            <TranslateIcon width={16} height={16} className={cl("accessory-icon")} />
+            {Parser.parse(translation.text)}
+            <br />
+            (원본 언어: {translation.sourceLanguage} - <Dismiss onDismiss={() => setTranslation(undefined)} />)
+        </span>
+    );
+}
