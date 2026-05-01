@@ -46,6 +46,17 @@ function Get-LatestDiscordExe {
     return $null
 }
 
+function Start-DetachedDiscord {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+
+    $workingDirectory = Split-Path -Parent $Path
+    $shell = New-Object -ComObject Shell.Application
+    $shell.ShellExecute($Path, "", $workingDirectory, "open", 1)
+}
+
 function Test-DevInjection {
     if (-not (Test-Path $discordRoot)) {
         return $false
@@ -140,7 +151,7 @@ try {
         $discordExe = Get-LatestDiscordExe
         if ($discordExe) {
             Invoke-Step "Launching Discord" {
-                Start-Process -FilePath $discordExe | Out-Null
+                Start-DetachedDiscord -Path $discordExe
             }
         } else {
             Write-Warning "Discord.exe was not found under $discordRoot"
